@@ -15,7 +15,7 @@ transform = transforms.Compose([
 count = 0
 max_count = 10
 
-folder_path = 'C:/Users/oliwi/OneDrive/Pulpit/Studia/semestr 6/200zdjec'
+folder_path = os.path.join(os.path.dirname(__file__), '200zdjec')
 for filename in os.listdir(folder_path):
     if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
         file_path = os.path.join(folder_path, filename)
