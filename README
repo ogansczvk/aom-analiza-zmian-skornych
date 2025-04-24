@@ -1,1 +1,5 @@
 #pip install torch torchvision matplotlib
+#pip install segmentation-models-pytorch
+#pip install pretrainedmodels efficientnet-pytorch
+#pip install pandas
+
