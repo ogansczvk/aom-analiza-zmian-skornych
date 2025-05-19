@@ -1,6 +1,7 @@
 import os
 import zipfile
 import pandas as pd
+import os
 import pickle
 from kaggle.api.kaggle_api_extended import KaggleApi
 
@@ -12,7 +13,7 @@ if not os.path.exists(download_path):
     os.makedirs(download_path)
 
 #sciezka do pliku kaggle.json
-os.environ['KAGGLE_CONFIG_DIR'] = os.path.expanduser('C:/Users/olasu/.kaggle') 
+os.environ['KAGGLE_CONFIG_DIR'] = os.path.expanduser('C:\Users\oliwi\.kaggle\kaggle.json') 
 
 #pobranie danych z kaggle
 dataset = "kmader/skin-cancer-mnist-ham10000"
@@ -39,32 +40,26 @@ metadata_path = os.path.join(download_path, "HAM10000_metadata.csv")
 images_folder = download_path
 photos = []
 
-df = pd.read_csv(metadata_path)
+zdjecia = './zdjecia'
+files_in_folder = os.listdir(zdjecia)
+df = pd.read_csv('HAM10000_metadata.csv', skiprows = 1, header=None)
 count = 0
 
-print("Wyszukiwanie zdjęć czerniaka z histopatologią...")
-
-for _, row in df.iterrows():
-    img_id = row['image_id']
-    dx = row['dx']
-    method = row['dx_type']
-    if dx == 'mel' and method == 'histo':
-        filename = img_id + ".jpg"
-# Szukamy pliku rekursywnie w ./data
-        photo_path = None
-        for root, dirs, files in os.walk(images_folder):
-            if filename in files:
-                photo_path = os.path.join(root, filename)
-                break
-
-        if photo_path:
-            photos.append(photo_path)
-
-            count += 1
-            print(f"[{count}] Dodano: {filename}")
+for index, row in df.iterrows():
+    kolumna0 = row[1] #nr zdjecia kod isic
+    kolumna2 = row[2] #choroba
+    kolumna3 = row[3] #sposob badania
+    if (kolumna2 == 'mel') and (kolumna3 == 'histo'): #mel ma tylko histo
+        #print(kolumna0)
+        for filename in files_in_folder:
+            if kolumna0 in filename:
+                photo_path = os.path.join(zdjecia, filename)
+                photos.append(photo_path)
+                count += 1
+                photo = kolumna0
+                print(count)
 
 # Zapis listy ścieżek do pliku
 with open("photos.pkl", "wb") as f:
     pickle.dump(photos, f)
-
-print(f"📦 Zapisano {len(photos)} ścieżek do pliku photos.pkl")
+        

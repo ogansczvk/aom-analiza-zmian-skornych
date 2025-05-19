@@ -4,36 +4,36 @@ import torch.optim as optim
 from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader
 
-# 🔧 Parametry
+# Parametry
 batch_size = 16
 num_epochs = 5
 learning_rate = 0.001
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# 📦 Transformacje (resize, tensor, normalizacja)
+# Transformacje (resize, tensor, normalizacja)
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize([0.5]*3, [0.5]*3)  # dla RGB
 ])
 
-# 📂 Wczytaj dane z folderów
+# Wczytaj dane z folderów
 train_data = datasets.ImageFolder('czerniaki_binary_train', transform=transform)
 test_data = datasets.ImageFolder('czerniaki_binary_test', transform=transform)
 
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=batch_size)
 
-# 🧠 Model: ResNet18 z modyfikacją wyjścia do 1 klasy (binary)
+# Model: ResNet18 z modyfikacją wyjścia do 1 klasy (binary)
 model = models.resnet18(pretrained=True)
 model.fc = nn.Linear(model.fc.in_features, 1)  # Binary classification → 1 neuron
 model = model.to(device)
 
-# 🎯 Strata i optymalizator
+# Strata i optymalizator
 criterion = nn.BCEWithLogitsLoss()  # Binary Cross Entropy z logitami
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-# 🔁 Trenowanie
+# Trenowanie
 for epoch in range(num_epochs):
     model.train()
     running_loss = 0.0
@@ -52,7 +52,7 @@ for epoch in range(num_epochs):
 
     print(f"[{epoch+1}/{num_epochs}] Loss: {running_loss/len(train_loader):.4f}")
 
-# ✅ Ewaluacja
+# Ewaluacja
 model.eval()
 correct = 0
 total = 0

@@ -40,10 +40,14 @@ import pickle
 #             break
         
 
-
+count = 0
 
 with open("photos.pkl", "rb") as f:
     photos = pickle.load(f)
+
+#tworzenie folderu na nowe zdjecia
+output_dir = "output"
+os.makedirs(output_dir, exist_ok=True)
 
 #Input image
 for path in photos:
@@ -64,23 +68,26 @@ for path in photos:
 
 #Gaussian filter
     bhg= cv2.GaussianBlur(tophat,(3,3),cv2.BORDER_DEFAULT)
-#bhg_blackhat= cv2.GaussianBlur(blackhat,(3,3),cv2.BORDER_DEFAULT) #tu musza byc wartosci nieparzyste, przy zwiekszeniu do (9,9) daje gorsze efekty
+#tu musza byc wartosci nieparzyste, przy zwiekszeniu do (9,9) daje gorsze efekty
 #Binary thresholding (MASK) Jeśli piksel ma wartość większą niż 10, staje się białym (255), w przeciwnym razie czarnym (0).
     ret,mask = cv2.threshold(bhg,10,255,cv2.THRESH_BINARY)
-#ret_blackhat,mask_blackhat = cv2.threshold(bhg_blackhat,10,255,cv2.THRESH_BINARY)
 #Replace pixels of the mask - Metoda "inpainting" zastępuje obszary z włosami pobliskimi pikselami skóry.
     dst = cv2.inpaint(img,mask,6,cv2.INPAINT_TELEA)
-#dst_blackhat = cv2.inpaint(img,mask_blackhat,6,cv2.INPAINT_TELEA)
+    count += 1
+    output_path = os.path.join(output_dir, f"processed_{count}.jpg")
+    cv2.imwrite(output_path, dst)
+
+print(f"Przetworzono {count} obrazów z {len(photos)}.")
 
 #Display images
-    cv2.imshow("Original image",image)
-    cv2.imshow("Cropped image",img)
-    cv2.imshow("Gray Scale image",grayScale)
-    cv2.imshow("tophat",tophat)
-    cv2.imshow("blackhat", blackhat)
-    cv2.imshow("Binary mask",mask)
-    cv2.imshow("Clean image tophat",dst)
+#    cv2.imshow("Original image",image)
+#    cv2.imshow("Cropped image",img)
+#    cv2.imshow("Gray Scale image",grayScale)
+#   cv2.imshow("tophat",tophat)
+#    cv2.imshow("blackhat", blackhat)
+#    cv2.imshow("Binary mask",mask)
+#   cv2.imshow("Clean image tophat",dst)
 #cv2.imshow("Clean image",dst_blackhat)
 
-    cv2.waitKey()
+#    cv2.waitKey()
 #cv2.destroyAllWindows()

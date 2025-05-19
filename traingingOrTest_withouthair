@@ -1,0 +1,20 @@
+import os
+import shutil
+import pandas as pd
+import random
+
+random.seed(42)
+mel_dir = "output"
+nonmel_dir = "czerniaki_binary_test\not_melanoma"
+
+# Zbalansuj liczebność 
+nonmel_dir = nonmel_dir.sample(n=len(mel_dir), random_state=42)
+
+#Połącz i pomieszaj
+binary_df = pd.concat([mel_dir, nonmel_dir]).sample(frac=1, random_state=42).reset_index(drop=True)
+
+# Podział na 80% trening / 20% test
+split_idx = int(0.8 * len(binary_df))
+train_df = binary_df[:split_idx]
+test_df = binary_df[split_idx:]
+
