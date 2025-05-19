@@ -18,8 +18,8 @@ transform = transforms.Compose([
 ])
 
 # Wczytaj dane z folderów
-train_data = datasets.ImageFolder('czerniaki_binary_train', transform=transform)
-test_data = datasets.ImageFolder('czerniaki_binary_test', transform=transform)
+train_data = datasets.ImageFolder('train_wh', transform=transform)
+test_data = datasets.ImageFolder('test_wh', transform=transform)
 
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=batch_size)
@@ -66,4 +66,4 @@ with torch.no_grad():
         correct += (predictions == labels).sum().item()
         total += labels.size(0)
 
-print(f"🎯 Accuracy on test set: {100 * correct / total:.2f}%")
+print(f"Accuracy on test set: {100 * correct / total:.2f}%")

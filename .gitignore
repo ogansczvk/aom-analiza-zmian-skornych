@@ -172,3 +172,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+#foldery z danymi treningowymi
+output/
+czerniaki_binary_train/
+czerniaki_binary_test/
+data/
+test_wh/
+train_wh/
