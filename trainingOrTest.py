@@ -51,4 +51,4 @@ for base in ['czerniaki_binary_train', 'czerniaki_binary_test']:
 copy_images(train_df, 'czerniaki_binary_train')
 copy_images(test_df, 'czerniaki_binary_test')
 
-print("✅ Gotowe: utworzono strukturę binary classification (melanoma vs not_melanoma)")
+print("Gotowe: utworzono strukturę binary classification (melanoma vs not_melanoma)")

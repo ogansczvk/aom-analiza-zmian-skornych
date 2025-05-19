@@ -26,12 +26,16 @@ test_loader = DataLoader(test_data, batch_size=batch_size)
 
 # Model: ResNet18 z modyfikacją wyjścia do 1 klasy (binary)
 model = models.resnet18(pretrained=True)
+for param in model.parameters():
+    param.requires_grad = False
 model.fc = nn.Linear(model.fc.in_features, 1)  # Binary classification → 1 neuron
+for param in model.fc.parameters():
+    param.requires_grad = True
 model = model.to(device)
 
 # Strata i optymalizator
 criterion = nn.BCEWithLogitsLoss()  # Binary Cross Entropy z logitami
-optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+optimizer = optim.Adam(model.fc.parameters(), lr=learning_rate)
 
 # Trenowanie
 for epoch in range(num_epochs):
